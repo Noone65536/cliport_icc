@@ -18,14 +18,14 @@ import matplotlib.pyplot as plt
 def get_agent(root_dir=os.environ['CLIPORT_ROOT']):
     """
     get the pre-trained agent using pre-defined args.
-    
+
     params:
         root_dir: the root directory of the repository
     return:
         agent: the pre-trained agent
 
     TODO: get the agent using the config file and the input args
-    
+
     """
 
     # model settings
@@ -41,7 +41,7 @@ def get_agent(root_dir=os.environ['CLIPORT_ROOT']):
 
     eval_task = 'packing-unseen-google-objects-seq'
 
-    config_file = 'eval.yaml' 
+    config_file = 'eval.yaml'
 
     vcfg = utils.load_hydra_config(os.path.join(root_dir, f'cliport/cfg/{config_file}'))
     vcfg['data_dir'] = os.path.join(root_dir, 'data')
@@ -102,7 +102,7 @@ def show_imgs(img,agent,l):
     # Display input depth
     axs[0,1].imshow(depth)
     axs[0,1].axes.xaxis.set_visible(False)
-    axs[0,1].axes.yaxis.set_visible(False)        
+    axs[0,1].axes.yaxis.set_visible(False)
     axs[0,1].set_title('Input Depth')
 
     # Display predicted pick affordance
@@ -142,7 +142,7 @@ def show_imgs(img,agent,l):
     argmax = np.unravel_index(argmax, shape=place_conf.shape)
     p1_pix = argmax[:2]
     p1_theta = (argmax[2] * (2 * np.pi / place_conf.shape[2]) + p0_theta) * -1.0
-        
+
     line_len = 30
     place0 = (p1_pix[0] + line_len/2.0 * np.sin(p1_theta), p1_pix[1] + line_len/2.0 * np.cos(p1_theta))
     place1 = (p1_pix[0] - line_len/2.0 * np.sin(p1_theta), p1_pix[1] - line_len/2.0 * np.cos(p1_theta))
@@ -151,7 +151,7 @@ def show_imgs(img,agent,l):
 
     affordance_heatmap_scale = 30
     pick_logits_disp = np.uint8(logits * 255 * affordance_heatmap_scale).transpose(1,0,2)
-    place_logits_disp = np.uint8(np.sum(place_conf, axis=2)[:,:,None] * 255 * affordance_heatmap_scale).transpose(1,0,2)    
+    place_logits_disp = np.uint8(np.sum(place_conf, axis=2)[:,:,None] * 255 * affordance_heatmap_scale).transpose(1,0,2)
 
     pick_logits_disp_masked = np.ma.masked_where(pick_logits_disp < 0, pick_logits_disp)
     place_logits_disp_masked = np.ma.masked_where(place_logits_disp < 0, place_logits_disp)
