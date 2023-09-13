@@ -186,13 +186,13 @@ def get_pre_trained_pick_and_place(dataset=None, agent=None, l=None):
     """
 
     # load agent
-    agent = get_agent(os.getcwd()) if agent is None else agent
+    agent = get_agent() if agent is None else agent
 
     # Load dataset
-    ds =  RealCamDataset('real_cam_data') if dataset is None else dataset
+    ds =  RealCamDataset('real_cam_data') if dataset is None else  RealCamDataset(dataset)
 
     # get the language goal
-    l = "pick up the green bottle cap to the cup" if l is None else l   
+    l = "pick up the green bottle cap to the cup" if l is None else l
 
     # get the first image
     img = ds.__getitem__(0)
@@ -201,12 +201,12 @@ def get_pre_trained_pick_and_place(dataset=None, agent=None, l=None):
     act = agent.act_img(img,l)
     pick = [float(i) for i in act['pick']]
     place = [float(i) for i in act['place']]
-    dict = {'pick_loc':pick[:2], 'place_loc': place[:2], 'pick_rot': pick[2], 'place_rot': place[2]}
+    out_dict = {'pick_loc':pick[:2], 'place_loc': place[:2], 'pick_rot': pick[2], 'place_rot': place[2]}
 
     print(act)
 
     with open('output.json', 'w') as f:
-        dict = json.dump(dict,f)
+        json.dump(out_dict,f)
 
     # show the affordance
     show_imgs(img,agent,l)
