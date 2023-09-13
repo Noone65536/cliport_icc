@@ -4,6 +4,7 @@ Remenber to set the environment variable CLIPORT_ROOT to the root directory of t
 
 
 # import libraries
+import sys
 import os
 import json
 import numpy as np
@@ -172,7 +173,7 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 
-def get_pre_trained_pick_and_place(dataset=None, agent=None, l=None):
+def get_pre_trained_pick_and_place(dataset=None, agent=None, l=None, outfile='output'):
     """
     get the pick and place action using the pre-trained agent and the input image and language goal
 
@@ -205,11 +206,17 @@ def get_pre_trained_pick_and_place(dataset=None, agent=None, l=None):
 
     print(act)
 
-    with open('output.json', 'w') as f:
+    with open(f'cliport_icc_out/{outfile}.json', 'w') as f:
         json.dump(out_dict,f)
 
     # show the affordance
     show_imgs(img,agent,l)
 
 if __name__ == '__main__':
-    get_pre_trained_pick_and_place()
+    output_file = sys.argv[1]
+    text = sys.argv[2]
+    image = sys.argv[3]
+    model =  model = sys.argv[4] if len(sys.argv) > 4 else None
+
+
+    get_pre_trained_pick_and_place(dataset=image, agent=model, l=text, outfile=output_file)
